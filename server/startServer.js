@@ -5,11 +5,14 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import open from 'open';
 import config from '../webpack.config.dev';
+import socketIO from 'socket.io';
+import http from 'http';
 
 
 const port = 3000;
 const compiler = webpack(config);
 const app = express();
+
 
 app.use(webpackDevMiddleware(compiler, {
 	noInfo: true,
@@ -17,6 +20,8 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 
 app.use(webpackHotMiddleware(compiler));
+
+
 
 // Route Method
 app.get('*', (req, res) => {
@@ -26,3 +31,4 @@ app.get('*', (req, res) => {
 app.listen(port, (err) => {
 	err ? console.log(err) : open('http://localhost:3000')
 })
+

@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
+import SocketIoClient from 'socket.io-client';
 
 export default class Test extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			id: 0
+			host: 'http://localhost:4001',
+			response: null
 		}
-		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick() {
-		
+	componentDidMount() {
+		const { host } = this.state;
+		const socket = SocketIoClient(host);
+		socket.on("FROMAPI", (data) => this.setState({ response: data }));
 	}
+
 
 	render() {
-		return(
-			<button onClick={this.handleClick}>{this.state.id}</button>
+		const { response } = this.state;
+		return (
+		<div style={{ textAlign: "center" }}>
+			{response
+			? <p>
+				The temperature in Florence is: {response} °F
+				</p>
+			: <p>Loading...</p>}
+		</div>
 		);
-	}
+ 	}
 }
