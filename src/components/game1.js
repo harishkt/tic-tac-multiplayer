@@ -16,7 +16,9 @@ const initState = (currentPlayer) => ({
 	],
 	data: Array(9).fill(null),
 	currentPlayer,
-	otherPlayerPlay: false
+	didOtherPlayed: true,
+	displayMsgs: ''
+	
 });
 
 export default class Game extends Component {
@@ -32,8 +34,10 @@ export default class Game extends Component {
 	componentDidMount() {
 		this.socket.on('turnPlayed', ({ data, room }) => {
 			console.log(`We get new data from server  - ${data} and ${room}`);
+			const didOtherPlayed = !this.state.didOtherPlayed;
 			this.setState({
-				data: data.data
+				data,
+				didOtherPlayed
 			});
 		})
 	}
@@ -41,6 +45,14 @@ export default class Game extends Component {
 		const { player, gameId, playerSymbol } = this.props;
 		console.log(`Entered handleClickNew event with ${tile}`)
 		const [ ...data ] = this.state.data;
+		const{ didOtherPlayed, displayMsgs } = this.state;
+		if (!didOtherPlayed) {
+			const waitMsg = 'Wait for Other players turn';
+			this.setState({
+				displayMsgs: waitMsg
+			})
+			return;
+		}
 		const Msg = `You selected Tile - ${tile}`;
 		if (didWin(data) || isDraw(data)) {
 			return;
@@ -51,7 +63,8 @@ export default class Game extends Component {
 		data[tile] = playerSymbol;
 		this.socket.emit('boardUpdated', ({ player, room: gameId, data }));
 		this.setState({
-			data
+			data,
+			didOtherPlayed: false
 		});
 	}
 	handleReset() {
@@ -68,8 +81,10 @@ export default class Game extends Component {
 	}
 	getGameStatus() {
 		const { data } = this.state;
-		const winner = didWinByPlayer(data, aiPlayer)
-			? aiPlayer : didWinByPlayer(data, humanPlayer) ? humanPlayer : null;
+		console.log(`In getGame status - ${data}`)
+		/* const winner = didWinByPlayer(data, aiPlayer)
+			? aiPlayer : didWinByPlayer(data, humanPlayer) ? humanPlayer : null; */
+		const winner = false;
 		return winner
 			? { status: 'Win', winner }
 			: isDraw(data)
@@ -82,9 +97,7 @@ export default class Game extends Component {
 	
 	render() {
 		console.log(`Entered render method for ${this.props.gameId} and ${this.props.player}`);
-		// <ol>{this.showHistory()}</ol>
-		// <div className="game-status">Status:{this.getGameStatus()}</div>
-		const { currentPlayer } = this.state;
+		const { currentPlayer, displayMsgs } = this.state;
 		const { status,  winner } = this.getGameStatus();
 		const gameBoard = (
 			<Board 
@@ -110,6 +123,7 @@ export default class Game extends Component {
 		return(
 			<div>
 				<h1 className="game-heading">Tic Tac Toe</h1>
+				<p>{displayMsgs}</p>
 				{playGame }
 			</div>
 		);
