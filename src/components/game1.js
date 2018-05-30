@@ -90,13 +90,9 @@ export default class Game extends Component {
 			: isDraw(data)
 				? { status: 'Draw' } : { status: null }
 	}
-	showHistory() {
-		const { history } = this.state;
-		return history.map((step, index) => <li key={index}>{step}</li>);
-	}
 	
 	render() {
-		console.log(`Entered render method for ${this.props.gameId} and ${this.props.player}`);
+		console.log(`Entered render method for ${this.props.gameId}`);
 		const { currentPlayer, displayMsgs } = this.state;
 		const { status,  winner } = this.getGameStatus();
 		const gameBoard = (

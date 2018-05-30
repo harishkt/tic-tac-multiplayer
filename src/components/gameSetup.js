@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import GameBoard from './game1';
 import SockerIOClient from 'socket.io-client';
 const host = "http://localhost:4001"
-/*
- Gives a welcome prompt
- Asks you to either Join a Game or Create a Game
- If Create a Game--> game is created
- If join a game ..asks for gameId
-*/
+
 
 const isGtypeSelected = (gameType) => {
 	if (gameType === 'new' || gameType === 'join') {
@@ -27,7 +22,7 @@ const WelcomeScreen = ({ handleGameType }) => {
 }
 
 const EnterGameTypeInformation = (props) => {
-	const { gameType, handleCreateGame, handleInputs, handleJoinGame, player1, gameId, player2 } = props;
+	const { gameType, handleCreateGame, handleInputs, handleJoinGame, player1, roomId, player2 } = props;
 	const userInfo = gameType === "new" ? (
 		<form onSubmit={handleCreateGame}>
 					<label>
@@ -47,8 +42,8 @@ const EnterGameTypeInformation = (props) => {
 				Game Id:
 				<input
 					type="text"
-					name="gameId"
-					value={gameId}
+					name="roomId"
+					value={roomId}
 					onChange={handleInputs}
 				/>
 			</label>
@@ -70,6 +65,8 @@ const EnterGameTypeInformation = (props) => {
 		</div>
 	);
 }
+const clientByRoom = {};
+
 
 export default class GameClient extends Component {
 
@@ -77,11 +74,12 @@ export default class GameClient extends Component {
 		super(props);
 		this.state = {
 			gameType: '',
-			gameId: '',
+			roomId: '',
 			player1: '',
 			player2: '',
-			gameStart: false,
-			playerSymbol: ''
+			roomCreated: false,
+			playerSymbol: '',
+			showBoard: false
 		};
 		this.socket = SockerIOClient(host);
 		this.handleCreateGame = this.handleCreateGame.bind(this);
@@ -110,7 +108,7 @@ export default class GameClient extends Component {
 		const { player1 } = this.state;
 		this.socket.emit('createGame', { name: player1 });
 		this.setState({
-			gameStart: true,
+			roomCreated: true,
 			playerSymbol: 'X'
 		});
 		event.preventDefault();
@@ -118,10 +116,10 @@ export default class GameClient extends Component {
 
 	handleJoinGame(event) {
 		console.log('handle Join Game event entered');
-		const { player2, gameId } = this.state;
-		this.socket.emit('joinGame', { name: player2, room: gameId })
+		const { player2, roomId } = this.state;
+		this.socket.emit('joinGame', { name: player2, room: roomId })
 		this.setState({
-			gameStart: true,
+			roomCreated: true,
 			playerSymbol: 'O'
 		});
 		event.preventDefault();
@@ -129,47 +127,60 @@ export default class GameClient extends Component {
 
 	componentDidMount() {
 		this.socket.on('newGame', data => {
-			console.log('new game event received from server');
-			console.log(`For player - ${data.name} and the room number is ${data.room}`);
 			this.setState({
 				player1: data.name,
-				gameId: data.room
+				roomId: data.room
 			});
 		});
 		this.socket.on('playerJoined', data => {
-			console.log(`player joined event from server - ${data}`);
 			this.setState({
 				player2: data.name,
-				gameId: data.room
+				roomId: data.room,
+				showBoard: true
 			});
 		});
+		this.socket.on('allPlayersJoined', data => {
+			this.setState({
+				showBoard: data.showBoard
+			});
+		})
 	}
 
 	render() {
-		const { gameType, player2, player1, gameId, gameStart, playerSymbol } = this.state;
-		console.log(this.state);
+		console.log(`the state of gamesetup is ${JSON.stringify(this.state)}`);
+		const { gameType, player2, player1, roomId, roomCreated, showBoard, playerSymbol } = this.state;
 		const player = player1 || player2;
 		const isGameTypeSelected = isGtypeSelected(gameType);
 		const greeting = !isGameTypeSelected ? (
 			<WelcomeScreen handleGameType={this.handleGameType} />
 		) : (
-			<EnterGameTypeInformation 
+			<EnterGameTypeInformation
 				gameType={gameType}
 				handleCreateGame={this.handleCreateGame}
 				handleJoinGame={this.handleJoinGame}
 				handleInputs={this.handleInputs}
 				player1={player1}
-				gameId={gameId}
+				roomId={roomId}
 				player2={player2}
 			/>
 		);
-		const display = gameStart
-			? (<GameBoard
-					player={player}
-					gameId={gameId}
-					socket={this.socket}
-					playerSymbol={playerSymbol}
-			/>) : greeting;
+		let display;
+		if (roomCreated) {
+			if (showBoard) {
+				display = (
+					<GameBoard
+						player={player}
+						gameId={roomId}
+						socket={this.socket}
+						playerSymbol={playerSymbol}
+					/>
+				);
+			} else {
+				display = (<div> Wait for other player to join</div>);
+			}
+		} else {
+			display = greeting;
+		}
 		return(
 			<div>
 				{display}
