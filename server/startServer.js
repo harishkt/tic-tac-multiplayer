@@ -33,7 +33,7 @@ if (isDevelopment) {
 	app.use(express.static(DIST_DIR));
 	app.get('*', (req, res) => res.sendFile(HTML_FILE));
 }
-app.listen(app.get('port'), () => {
-	console.log(`Server listening on port - ${app.get('port')}`);
+app.listen(process.env.PORT || 3000, () => {
+	console.log(`Server listening on port - ${process.env.PORT || 3000}`);
 });
 
