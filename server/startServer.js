@@ -36,8 +36,4 @@ if (isDevelopment) {
 app.listen(app.get('port'), () => {
 	console.log(`Server listening on port - ${app.get('port')}`);
 });
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "http://radiant-tor-38672.herokuapp.com");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
-  });
+
