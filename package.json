@@ -6,8 +6,9 @@
     "lint": "node_modules/.bin/esw src server",
     "lint:watch": "npm run lint -- --watch",
     "open:app": "node -r babel-register server/startServer.js",
-    "start": "npm run lint:watch | npm run open:app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "startDev": "npm run lint:watch | npm run open:app",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --config ./webpack.deployment.config.js --progress colors && node server/startServer.js"
   },
   "repository": {
     "type": "git",

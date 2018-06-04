@@ -2,12 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports =  {
-	devtool: 'inline-source-map',
-	devServer: {
-		contentBase: path.resolve(__dirname, 'src')
-	},
+	devtool: 'source-map',
 	entry: [
-		'webpack-hot-middleware/client?reload=true',
 		path.resolve(__dirname, 'src/index')
 	],
 	output: {
@@ -32,10 +28,12 @@ module.exports =  {
 		]
 	},
 	plugins: [
-		new webpack.HotModuleReplacementPlugin(),
-		new webpack.LoaderOptionsPlugin({
-			debug: true
+		new webpack.optimize.UglifyJsPlugin({
+			minimize: true,
+			compress: {
+				warnings: false
+			}
 		})
 	],
 	target: 'web'
-};
+}

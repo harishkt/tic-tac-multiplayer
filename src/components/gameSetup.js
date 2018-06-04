@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import GameBoard from './game1';
+import GameBoard from './multi-player';
 import SockerIOClient from 'socket.io-client';
-const host = "http://localhost:4001"
+const host = "https://radiant-tor-38672.herokuapp.com"
 
 
 const isGtypeSelected = (gameType) => {
@@ -65,8 +65,6 @@ const EnterGameTypeInformation = (props) => {
 		</div>
 	);
 }
-const clientByRoom = {};
-
 
 export default class GameClient extends Component {
 
@@ -79,7 +77,8 @@ export default class GameClient extends Component {
 			player2: '',
 			roomCreated: false,
 			playerSymbol: '',
-			showBoard: false
+			showBoard: false,
+			gameInfo: null
 		};
 		this.socket = SockerIOClient(host);
 		this.handleCreateGame = this.handleCreateGame.bind(this);
@@ -129,26 +128,29 @@ export default class GameClient extends Component {
 		this.socket.on('newGame', data => {
 			this.setState({
 				player1: data.name,
-				roomId: data.room
+				roomId: data.room,
+				gameInfo: data.gameInfo
 			});
 		});
 		this.socket.on('playerJoined', data => {
 			this.setState({
 				player2: data.name,
 				roomId: data.room,
-				showBoard: true
+				showBoard: true,
+				gameInfo: data.gameInfo
 			});
 		});
 		this.socket.on('allPlayersJoined', data => {
 			this.setState({
-				showBoard: data.showBoard
+				showBoard: data.showBoard,
+				gameInfo: data.gameInfo
 			});
 		})
 	}
 
 	render() {
 		console.log(`the state of gamesetup is ${JSON.stringify(this.state)}`);
-		const { gameType, player2, player1, roomId, roomCreated, showBoard, playerSymbol } = this.state;
+		const { gameType, player2, player1, roomId, roomCreated, showBoard, playerSymbol, gameInfo } = this.state;
 		const player = player1 || player2;
 		const isGameTypeSelected = isGtypeSelected(gameType);
 		const greeting = !isGameTypeSelected ? (
@@ -173,10 +175,11 @@ export default class GameClient extends Component {
 						gameId={roomId}
 						socket={this.socket}
 						playerSymbol={playerSymbol}
+						gameInfo={gameInfo}
 					/>
 				);
 			} else {
-				display = (<div> Wait for other player to join</div>);
+				display = (<div> Send the RoomId - {roomId} for others to Join</div>);
 			}
 		} else {
 			display = greeting;

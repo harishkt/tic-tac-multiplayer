@@ -1,34 +1,43 @@
-import express from 'express';
-import path from 'path';
-import webpack from 'webpack';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import open from 'open';
-import config from '../webpack.config.dev';
-import socketIO from 'socket.io';
-import http from 'http';
+const express = require('express');
+const path = require('path');
+const webpack = require('webpack');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const open = require('open');
+const config = require('../webpack.config.dev');
+const http = require('http');
 
 
-const port = 3000;
-const compiler = webpack(config);
+
 const app = express();
+const DIST_DIR = path.join(__dirname, 'dist');
+const HTML_FILE = path.join(DIST_DIR, 'index.html');
+const isDevelopment = process.env.NODE_ENV !== 'production';
+const DEFAULT_PORT = 3000;
+const compiler = webpack(config);
 
+app.set("port", process.env.port || DEFAULT_PORT );
 
-app.use(webpackDevMiddleware(compiler, {
-	noInfo: true,
-	publicPath: config.output.publicPath
-}));
-
-app.use(webpackHotMiddleware(compiler));
-
-
-
-// Route Method
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../src/index.html'));
+if (isDevelopment) {
+	app.use(webpackDevMiddleware(compiler, {
+		noInfo: true,
+		publicPath: config.output.publicPath
+	}));
+	app.use(webpackHotMiddleware(compiler));
+	// Route Method
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname, '../src/index.html'));
+	});
+	
+} else {
+	app.use(express.static(DIST_DIR));
+	app.get('*', (req, res) => res.sendFile(HTML_FILE));
+}
+app.listen(app.get('port'), () => {
+	console.log(`Server listening on port - ${app.get('port')}`);
 });
-
-app.listen(port, (err) => {
-	err ? console.log(err) : open('http://localhost:3000')
-})
-
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "http://radiant-tor-38672.herokuapp.com");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+  });
