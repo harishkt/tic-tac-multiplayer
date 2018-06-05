@@ -8,12 +8,12 @@ module.exports =  {
 	],
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname) + '/dist',
+		path: path.resolve(__dirname,  'dist'),
 		publicPath: '/dist/'
 	},
 	module: {
 		rules: [
-			{test: /\.(js|jsx)$/, use: 'babel-loader', exclude: [/node_modules/]},
+			{test: /\.(js|jsx)$/, use: 'babel', exclude: [/node_modules/]},
 			{
 				test: /\.css$/,
 				loader: 'style-loader!css-loader'
@@ -32,6 +32,12 @@ module.exports =  {
 			minimize: true,
 			compress: {
 				warnings: false
+			}
+		}),
+		new webpack.optimize.DedupePlugin(),
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify('production')
 			}
 		})
 	],
