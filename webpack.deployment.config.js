@@ -13,7 +13,7 @@ module.exports =  {
 	},
 	module: {
 		rules: [
-			{test: /\.(js|jsx)$/, use: 'babel', exclude: [/node_modules/]},
+			{test: /\.(js|jsx)$/, use: 'babel-loader', exclude: [/node_modules/]},
 			{
 				test: /\.css$/,
 				loader: 'style-loader!css-loader'
@@ -34,7 +34,6 @@ module.exports =  {
 				warnings: false
 			}
 		}),
-		new webpack.optimize.DedupePlugin(),
 		new webpack.DefinePlugin({
 			'process.env': {
 				'NODE_ENV': JSON.stringify('production')
