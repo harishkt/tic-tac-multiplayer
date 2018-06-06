@@ -11,7 +11,8 @@ const http = require('http');
 
 const app = express();
 const DIST_DIR = path.join(__dirname, 'dist');
-// const HTML_FILE = path.join(DIST_DIR, 'index.html');
+const HTML_DIR = path.join(__dirname, 'src');
+const HTML_FILE = path.join(HTML_DIR, 'index.html');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 console.log(`isDevelopment is ${isDevelopment}`);
 const DEFAULT_PORT = 3000;
@@ -34,7 +35,7 @@ if (isDevelopment) {
 } else {
 	console.log('entered else block');
 	app.use(express.static(DIST_DIR));
-	app.get('*', (req, res) => res.sendFile('./index.html'));
+	app.get('*', (req, res) => res.sendFile(HTML_FILE));
 }
 app.listen(process.env.PORT || 3000, () => {
 	console.log(`Server listening on port - ${process.env.PORT || 3000}`);
