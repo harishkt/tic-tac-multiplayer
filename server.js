@@ -13,12 +13,14 @@ const app = express();
 const DIST_DIR = path.join(__dirname, 'dist');
 // const HTML_FILE = path.join(DIST_DIR, 'index.html');
 const isDevelopment = process.env.NODE_ENV !== 'production';
+console.log(`isDevelopment is ${isDevelopment}`);
 const DEFAULT_PORT = 3000;
 const compiler = webpack(config);
 
 app.set("port", process.env.port || DEFAULT_PORT );
 
 if (isDevelopment) {
+	console.log('entered if block');
 	app.use(webpackDevMiddleware(compiler, {
 		noInfo: true,
 		publicPath: config.output.publicPath
@@ -30,6 +32,7 @@ if (isDevelopment) {
 	});
 	
 } else {
+	console.log('entered else block');
 	app.use(express.static(DIST_DIR));
 	app.get('*', (req, res) => res.sendFile('./index.html'));
 }
