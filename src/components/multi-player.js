@@ -1,5 +1,6 @@
 import React,  { Component } from 'react';
 import Board from './board';
+import GameHeader from './gameHeader';
 import { getOtherPlayer,
 		didWin,
 		didWinByPlayer,
@@ -71,24 +72,31 @@ export default class Game extends Component {
 		const { gameInfo } = this.state;
 		const { player, playerSymbol, gameId } = this.props;
 		const { currentPlayer, tilePositions, isGameOver, winner, status } = gameInfo;
+		
 		if (status === 'Win') {
 			return(<div>
+				<GameHeader roomNum={gameId.gameId} />
 				{currentPlayer} WON!!! Congrats
 				<button onClick={this.handlePlayAgain}>Play Again!!</button>
 			</div>)
 		} else if (status === 'Draw') {
 			return(
 			<div>
+				<GameHeader roomNum={gameId.gameId} />
 				<button onClick={this.handlePlayAgain}>Play Again!!</button>
 				<p>Game was Draw. Play Again!!!!!</p>
 			</div>)
 		}
 		return(
-			<Board 
+			<div>
+				<GameHeader roomNum={gameId.gameId} />
+				<Board 
 							onClick={this.handleClick}
 							data={tilePositions}
 							boardSize={3}
-			/>
+				/>
+			</div>
+			
 		)
 	}
 }
