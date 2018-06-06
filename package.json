@@ -8,7 +8,7 @@
     "open:app": "node -r babel-register server/startServer.js",
     "startDev": "npm run lint:watch | npm run open:app",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --config ./webpack.deployment.config.js && node server.js"
+    "start": "webpack --display-error-details --config ./webpack.deployment.config.js && node server.js"
   },
   "repository": {
     "type": "git",
