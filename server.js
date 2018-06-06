@@ -11,7 +11,7 @@ const http = require('http');
 
 const app = express();
 const DIST_DIR = path.join(__dirname, 'dist');
-const HTML_FILE = path.join(_dirname, 'index.html');
+const HTML_FILE = path.join(__dirname, 'index.html');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 console.log(`isDevelopment is ${isDevelopment}`);
 const DEFAULT_PORT = 3000;
