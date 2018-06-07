@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-
 const PlayerDisplay = ({ admin, otherPlayer }) => (
 	<div>
 		<div>
