@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "node_modules/.bin/esw src server",
     "lint:watch": "npm run lint -- --watch",
-    "open:app": "node -r babel-register server/startServer.js",
+    "open:app": "node -r babel-register server.js",
     "startDev": "npm run lint:watch | npm run open:app",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --display-error-details --config ./webpack.deployment.config.js",

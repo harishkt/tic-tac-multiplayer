@@ -70,26 +70,25 @@ export default class Game extends Component {
 	
 	render() {
 		const { gameInfo } = this.state;
-		const { player, playerSymbol, gameId } = this.props;
-		const { currentPlayer, tilePositions, isGameOver, winner, status } = gameInfo;
+		const { currentPlayer, tilePositions, isGameOver, winner, status, roomNum, player1, player2 } = gameInfo;
 		
 		if (status === 'Win') {
 			return(<div>
-				<GameHeader roomNum={gameId.gameId} />
+				<GameHeader roomNum={roomNum} player1 = {player1} player2={player2}/>
 				{currentPlayer} WON!!! Congrats
 				<button onClick={this.handlePlayAgain}>Play Again!!</button>
 			</div>)
 		} else if (status === 'Draw') {
 			return(
 			<div>
-				<GameHeader roomNum={gameId.gameId} />
+				<GameHeader roomNum={roomNum}  player1 = {player1} player2={player2}/>
 				<button onClick={this.handlePlayAgain}>Play Again!!</button>
 				<p>Game was Draw. Play Again!!!!!</p>
 			</div>)
 		}
 		return(
 			<div>
-				<GameHeader roomNum={gameId.gameId} />
+				<GameHeader roomNum={roomNum}  player1 = {player1} player2={player2}/>
 				<Board 
 							onClick={this.handleClick}
 							data={tilePositions}

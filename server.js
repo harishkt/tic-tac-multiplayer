@@ -20,7 +20,6 @@ const compiler = webpack(config);
 app.set("port", process.env.port || DEFAULT_PORT );
 
 if (isDevelopment) {
-	console.log('entered if block');
 	app.use(webpackDevMiddleware(compiler, {
 		noInfo: true,
 		publicPath: config.output.publicPath
@@ -28,7 +27,8 @@ if (isDevelopment) {
 	app.use(webpackHotMiddleware(compiler));
 	// Route Method
 	app.get('*', (req, res) => {
-		res.sendFile(path.join(__dirname, './src/index.html'));
+		console.log(HTML_FILE);
+		res.sendFile(HTML_FILE);
 	});
 	
 } else {
