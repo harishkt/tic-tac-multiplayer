@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import GameBoard from './multi-player';
 import SockerIOClient from 'socket.io-client';
-const host = "https://radiant-tor-38672.herokuapp.com"
+import config from '../../config';
+const host = config.serverConnection;
 
 
 const isGtypeSelected = (gameType) => {
@@ -108,7 +109,8 @@ export default class GameClient extends Component {
 		this.socket.emit('createGame', { name: player1 });
 		this.setState({
 			roomCreated: true,
-			playerSymbol: 'X'
+			playerSymbol: 'X',
+			player: player1
 		});
 		event.preventDefault();
 	}
@@ -119,7 +121,8 @@ export default class GameClient extends Component {
 		this.socket.emit('joinGame', { name: player2, room: roomId })
 		this.setState({
 			roomCreated: true,
-			playerSymbol: 'O'
+			playerSymbol: 'O',
+			player: player2
 		});
 		event.preventDefault();
 	}
@@ -150,8 +153,7 @@ export default class GameClient extends Component {
 
 	render() {
 		console.log(`the state of gamesetup is ${JSON.stringify(this.state)}`);
-		const { gameType, player2, player1, roomId, roomCreated, showBoard, playerSymbol, gameInfo } = this.state;
-		const player = player1 || player2;
+		const { gameType, player2, player1, roomId, roomCreated, showBoard, playerSymbol, gameInfo, player } = this.state;
 		const isGameTypeSelected = isGtypeSelected(gameType);
 		const greeting = !isGameTypeSelected ? (
 			<WelcomeScreen handleGameType={this.handleGameType} />

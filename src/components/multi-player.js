@@ -1,6 +1,8 @@
 import React,  { Component } from 'react';
 import Board from './board';
 import GameHeader from './gameHeader';
+import Chat from './chat';
+
 import { getOtherPlayer,
 		didWin,
 		didWinByPlayer,
@@ -71,12 +73,13 @@ export default class Game extends Component {
 	render() {
 		const { gameInfo } = this.state;
 		const { currentPlayer, tilePositions, isGameOver, winner, status, roomNum, player1, player2 } = gameInfo;
-		
+		const { player } = this.props;
 		if (status === 'Win') {
 			return(<div>
 				<GameHeader roomNum={roomNum} player1 = {player1} player2={player2}/>
 				{currentPlayer} WON!!! Congrats
 				<button onClick={this.handlePlayAgain}>Play Again!!</button>
+				<Chat roomNum={roomNum} socket={this.socket} player={player}/>
 			</div>)
 		} else if (status === 'Draw') {
 			return(
@@ -84,6 +87,7 @@ export default class Game extends Component {
 				<GameHeader roomNum={roomNum}  player1 = {player1} player2={player2}/>
 				<button onClick={this.handlePlayAgain}>Play Again!!</button>
 				<p>Game was Draw. Play Again!!!!!</p>
+				<Chat roomNum={roomNum} socket={this.socket} player={player}/>
 			</div>)
 		}
 		return(
@@ -94,6 +98,7 @@ export default class Game extends Component {
 							data={tilePositions}
 							boardSize={3}
 				/>
+				<Chat roomNum={roomNum} socket={this.socket} player={player}/>
 			</div>
 			
 		)
