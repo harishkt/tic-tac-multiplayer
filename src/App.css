@@ -203,3 +203,22 @@ ol, ul {
   85%  { border-radius: 850px 999px; }
   100% { border-radius: 999px 999px; }  
 }
+
+.welcome-screen-window {
+  background-color: red;
+  width: 50%;
+  margin: auto;
+}
+
+.game-heading {
+  font-size: 200%;
+
+}
+
+.game-type {
+  font-size: 150%;
+}
+
+.button {
+
+}

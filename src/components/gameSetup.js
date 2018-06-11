@@ -13,11 +13,11 @@ const isGtypeSelected = (gameType) => {
 }
 const WelcomeScreen = ({ handleGameType }) => {
 	return(
-		<div>
-			<h1> Welcome to Tic Tac MultiPlayer Game</h1>
-			<p>Select the Game Type</p>
-			<button name="new" onClick={handleGameType}>New Game</button>
-			<button name="join" onClick={handleGameType}>Join Game</button>
+		<div className="welcome-screen-window">
+			<h1 className="game-heading"> Welcome to Tic Tac MultiPlayer Game</h1>
+			<p classname="game-type">Select the Game Type</p>
+			<button className="button" name="new" onClick={handleGameType}>New Game</button>
+			<button className="button" name="join" onClick={handleGameType}>Join Game</button>
 		</div>
 	)
 }
