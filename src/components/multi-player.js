@@ -28,28 +28,22 @@ export default class Game extends Component {
 	
 	componentDidMount() {
 		this.socket.on('turnPlayed', ({ gameInfo }) => {
-			console.log('turnPlayeed event entered');
-			console.log(`We get new data from server  - ${gameInfo}`);
 			this.setState({
 				gameInfo
 			});
 		})
 		this.socket.on('resetGame', ({ gameInfo }) => {
-			console.log('resetGame Event triggered from server');
 			this.setState({
 				gameInfo
 			});
 		});
 	}
 	handleClick(tile) {
-		console.log(`You selected Tile - ${tile}`);
 		const { gameInfo } = this.state;
 		const { player, playerSymbol, gameId } = this.props;
 		const { currentPlayer, tilePositions, isGameOver, winner } = gameInfo;
-		console.log(`player and currentPlayer in handleClick is ${player} and ${currentPlayer}`);
 		if (player === currentPlayer) {
 			tilePositions[tile] = playerSymbol;
-			console.log(`new tile positions are ${tilePositions}`);
 			this.socket.emit('boardUpdated', ({ player, room: gameId, data: tilePositions }));
 		} else {
 			console.log('Dude u need to wait for other player to play!!!!!')
