@@ -46,7 +46,7 @@ export default class Game extends Component {
 			tilePositions[tile] = playerSymbol;
 			this.socket.emit('boardUpdated', ({ player, room: gameId, data: tilePositions }));
 		} else {
-			// console.log('Dude u need to wait for other player to play!!!!!')
+			console.log('Dude u need to wait for other player to play!!!!!')
 		}
 
 	}
@@ -58,7 +58,7 @@ export default class Game extends Component {
 		if (player === gameInfo.player1.name) {
 			this.socket.emit('playAgain', ({ room: gameId }));
 		} else {
-			// console.log('Dude Ask the administrator to start the game!!!');
+			console.log('Dude Ask the administrator to start the game!!!');
 		}
 	}
 	
