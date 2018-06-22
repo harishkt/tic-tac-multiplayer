@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { Button, Raised } from '@material-ui/core';
 import GameBoard from './multi-player';
 import SockerIOClient from 'socket.io-client';
 import config from '../../config';
 const host = config.serverConnection;
 
+const btnStyle = {
+	marginRight: '10px',
+	marginLeft: '10px'
+};
 
 const isGtypeSelected = (gameType) => {
 	if (gameType === 'new' || gameType === 'join') {
@@ -15,9 +20,11 @@ const WelcomeScreen = ({ handleGameType }) => {
 	return(
 		<div className="welcome-screen-window">
 			<h1 className="game-heading"> Welcome to Tic Tac MultiPlayer Game</h1>
-			<p classname="game-type">Select the Game Type</p>
-			<button className="button" name="new" onClick={handleGameType}>New Game</button>
-			<button className="button" name="join" onClick={handleGameType}>Join Game</button>
+			<p className="game-type">Select the Game Type</p>
+			<Button variant="contained" color="primary" style={btnStyle}
+				name="new" onClick={handleGameType}>New Game</Button>
+			<Button variant="contained" color="primary" style={btnStyle}
+				name="join" onClick={handleGameType}>Join Game</Button>
 		</div>
 	)
 }

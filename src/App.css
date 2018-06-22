@@ -205,9 +205,8 @@ ol, ul {
 }
 
 .welcome-screen-window {
-  background-color: red;
   width: 50%;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .game-heading {
@@ -220,5 +219,6 @@ ol, ul {
 }
 
 .button {
-
+  margin-right: 10px;
+  margin-left: 10px;
 }
