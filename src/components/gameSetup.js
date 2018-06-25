@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Raised } from '@material-ui/core';
+import { Button,
+	RaisedButton, FormControl,
+	FormLabel, TextField, FlatButton } from '@material-ui/core';
 import GameBoard from './multi-player';
 import SockerIOClient from 'socket.io-client';
 import config from '../../config';
@@ -33,16 +35,16 @@ const EnterGameTypeInformation = (props) => {
 	const { gameType, handleCreateGame, handleInputs, handleJoinGame, player1, roomId, player2 } = props;
 	const userInfo = gameType === "new" ? (
 		<form onSubmit={handleCreateGame}>
-					<label>
+					<FormLabel>
 						Enter name:
-						<input
+						<TextField
 							type="text"
 							name="player1"
 							value={player1}
 							onChange={handleInputs}
 						/>
-					</label>
-					<input type="submit" value="New Game" />
+					</FormLabel>
+					<Button type="submit" value="New Game" />
 		</form>
 	) : (
 		<form onSubmit={handleJoinGame}>
@@ -64,7 +66,7 @@ const EnterGameTypeInformation = (props) => {
 					onChange={handleInputs}
 				/>
 				</label>
-				<input type="submit" value="Join Game" />
+				<RaisedButton type="submit" value="Join Game" />
 		</form>
 	)
 	return(
@@ -96,7 +98,9 @@ export default class GameClient extends Component {
 	}
 
 	handleGameType(event) {
-		const name = event.target.name;
+		const name = event.currentTarget.name;
+		console.log(`In handleGameType - ${event.currentTarget}`)
+		console.log(`In handleGameType with ${name}`);
 		this.setState({
 			gameType: name,
 		});
