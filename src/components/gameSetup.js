@@ -44,29 +44,33 @@ const EnterGameTypeInformation = (props) => {
 							onChange={handleInputs}
 						/>
 					</FormLabel>
-					<Button type="submit" value="New Game" />
+					<Button  variant="contained" color="primary" style={btnStyle} type="submit" value="New Game" >
+						Create Game
+					</Button>
 		</form>
 	) : (
 		<form onSubmit={handleJoinGame}>
-			<label>
+			<FormLabel>
 				Game Id:
-				<input
+				<TextField
 					type="text"
 					name="roomId"
 					value={roomId}
 					onChange={handleInputs}
 				/>
-			</label>
-			<label>
+			</FormLabel>
+			<FormLabel>
 				Player2 Name:
-				<input
+				<TextField
 					type="text"
 					name="player2"
 					value={player2}
 					onChange={handleInputs}
 				/>
-				</label>
-				<RaisedButton type="submit" value="Join Game" />
+				</FormLabel>
+				<Button  variant="contained" color="primary" style={btnStyle} type="submit" value="Join Game" >
+					Join Game
+				</Button>
 		</form>
 	)
 	return(
